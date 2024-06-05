@@ -5,13 +5,18 @@ on:
     branches:
       - main
       - 'feature/*'
-      
+
 jobs:
   tag:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v3
+
+      - name: Set up Git user
+        run: |
+          git config --global user.email "dorsinai1004@gmail.com"
+          git config --global user.name "Dor Sinay"
 
       - name: Get Short Commit Hash
         id: get_commit_hash
