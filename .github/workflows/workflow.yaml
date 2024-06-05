@@ -1,0 +1,26 @@
+name: Tag Build with Short Commit Hash
+
+on:
+  push:
+    branches:
+      - main
+      - 'feature/*'
+      
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Get Short Commit Hash
+        id: get_commit_hash
+        run: echo "::set-output name=short_hash::$(git rev-parse --short HEAD)"
+
+      - name: Create Tag
+        run: |
+          TAG_NAME="build-${{ steps.get_commit_hash.outputs.short_hash }}"
+          git tag -a $TAG_NAME -m "Tagging build with short commit hash $TAG_NAME"
+          git push origin $TAG_NAME
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
